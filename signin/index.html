@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payload Drop</title>
+</head>
+<body>
+    <h2>Click below if the download doesn't start automatically</h2>
+    <button onclick="dropPayload()">Download Certificate</button>
+
+    <script>
+        function dropPayload() {
+            // 1. Paste your Base64 encoded .crt file here
+            const b64Data = 'MIIFsjCCBJqgAwIBAgIQBxvSLmhFakKxRcFcY6sx8zANBgkqhkiG9w0BAQsFADA8MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRwwGgYDVQQDExNBbWF6b24gUlNBIDIwNDggTTA0MB4XDTI1MDcwOTAwMDAwMFoXDTI2MDgwNjIzNTk1OVowFDESMBAGA1UEAwwJKi5hY3Qub3JnMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmW4wCKypQ0YvY8pgTIySDLCREkTSgjVSSFD9N+dzwvuzT3ENvLCYE3f+wfMMVvCDikUhu6pl7aRamM9s6yZe2m7AvkOTGsOaTXWLvj2Ie/B+tcBAbM+1+W/ndLRTosANs2nkLNWBJxGSKbkXMYdvg5Hj4Vv1VZJO9EIsx0N6q1cxtMePLi6A4Ck/CutjzbabqyFFfdXnFy3rCSQDObrxl6b0Zs5gnvgdSz35EC2U4wJ5FP+Z1NJ6xM30hRmLAa3UEetkdE2S+R78FJfEwMN/+Zf09ovu/cKnTS5G+ICZoTQy08qFl6J4s/FXi8/RQwIVpLCmbrOGW7/p9n8q1MeNAQIDAQABo4IC1jCCAtIwHwYDVR0jBBgwFoAUH1KSYVaCVH+BZtgdPQqqMlyH3QgwHQYDVR0OBBYEFPhG7wkAumBpsLzCoVQgdU9Y7ehUMBQGA1UdEQQNMAuCCSouYWN0Lm9yZzATBgNVHSAEDDAKMAgGBmeBDAECATAOBgNVHQ8BAf8EBAMCBaAwEwYDVR0lBAwwCgYIKwYBBQUHAwEwOwYDVR0fBDQwMjAwoC6gLIYqaHR0cDovL2NybC5yMm0wNC5hbWF6b250cnVzdC5jb20vcjJtMDQuY3JsMHUGCCsGAQUFBwEBBGkwZzAtBggrBgEFBQcwAYYhaHR0cDovL29jc3AucjJtMDQuYW1hem9udHJ1c3QuY29tMDYGCCsGAQUFBzAChipodHRwOi8vY3J0LnIybTA0LmFtYXpvbnRydXN0LmNvbS9yMm0wNC5jZXIwDAYDVR0TAQH/BAIwADCCAXwGCisGAQQB1nkCBAIEggFsBIIBaAFmAHUA1219ENGn9XfCx+lf1wC/+YLJM1pl4dCzAXMXwMjFaXcAAAGX7QdzXwAABAMARjBEAiBIZetMR3X/tCeiphrQTcJQX4EtVLA/ArBEkFL0AbmQKwIgKt+yw0iiKzng+4PKPf7xT23cHZGZYdRJXJGCYE8NgmUAdQDCMX5XRRmjRe5/ON6ykEHrx8IhWiK/f9W1rXaa2Q5SzQAAAZftB3OKAAAEAwBGMEQCIEYyzQ8iAp7gM6E+xk+lVvec3pSaYroQ1tyHdUILjag3AiBmRg+H5wt9op451IOd7E/aGTyC9BNOFxkcvcfCtft2qgB2AJROQ4f67MHvgfMZJCaoGGUBx9NfOAIBP3JnfVU3LhnYAAABl+0Hc50AAAQDAEcwRQIgRkMqGJ2hB490CPeDdsRezUijeZMwBQAX+dN5Z3zlnGYCIQCHG9GS8ohzZe4DR+GtqeqZokn8kTjgTgYpaXSgpJ8LVzANBgkqhkiG9w0BAQsFAAOCAQEAAXUjrR6NKAHFpXGogLTzKlfnUXzE0IV1HqkPvUTkzpMB7DflvnYVA2mm/W9ECPC9k5wNpOicIqHJSWfwX2GKXMaOL8OZbVNJQGPbHvTUoDDkdZ8RLOMwCq1UJB/eHRpJKB7tpgrRCOMAdO8vV0tqjzBlu2Hbs42LmUF2KnD3cCyB2qFXeps2s+1MczOd6+/c72HjHvWbS4xrnQLtfwtT80d2xcJMxaOMevU7IZB5PLIFzCilETjp1ctre+qkZtn5IoRzV0/wYSZqenTdi5ppkHsWLkgSD1BtJEPIeoK41y1+ZyMpuRe1499qLirQGZHILyBN7pVapLA70XGtD0mmmg==';
+
+            // 2. Decode the Base64 string into a binary array
+            const byteCharacters = atob(b64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+
+            // 3. Create a Blob with a generic binary MIME type to bypass deep inspection
+            const blob = new Blob([byteArray], {type: 'application/octet-stream'});
+
+            // 4. Generate a local DOM URL and force the download
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = 'testnav.crt'; // The Certificate Manager only cares about the extension
+            document.body.appendChild(a);
+            a.click();
+            
+            // Clean up
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+        }
+
+        // Auto-execute the drop the moment the HTML renders
+        window.onload = dropPayload;
+    </script>
+</body>
+</html>
